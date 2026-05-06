@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circles — P6 Math Cheatsheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f7f4ee;
+    --card: #faf8f3;
+    --rule: #d6d0c4;
+    --accent: #c0392b;
+    --accent2: #1a5276;
+    --accent3: #1e8449;
+    --muted: #7a7268;
+    --formula-bg: #0f0e0c;
+    --formula-fg: #f0ece0;
+    --warn: #7d4e00;
+    --warn-bg: #fff4e0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .title-block h1 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 2.6rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .title-block p {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .pi-stamp {
+    font-family: 'Crimson Pro', serif;
+    font-size: 4.5rem;
+    font-weight: 600;
+    color: var(--rule);
+    line-height: 1;
+    user-select: none;
+  }
+
+  /* ── LAYOUT ── */
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .col-left { display: flex; flex-direction: column; gap: 1.25rem; }
+  .col-right { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  /* ── SECTION ── */
+  section {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1rem 1.1rem 1rem;
+    position: relative;
+  }
+
+  section .sec-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  section .sec-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* ── SVG DIAGRAMS ── */
+  .diagram {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .diagram svg {
+    flex-shrink: 0;
+  }
+
+  /* ── FORMULA PILLS ── */
+  .formula-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 0.5rem;
+  }
+
+  .fpill {
+    background: var(--formula-bg);
+    color: var(--formula-fg);
+    border-radius: 3px;
+    padding: 0.45rem 0.7rem;
+  }
+
+  .fpill .flabel {
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #a09888;
+    margin-bottom: 3px;
+  }
+
+  .fpill .fval {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--formula-fg);
+    line-height: 1.2;
+  }
+
+  .fpill .falt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #a09888;
+    margin-top: 2px;
+  }
+
+  .fpill.blue .fval { color: #7ec8e3; }
+  .fpill.green .fval { color: #7ecba0; }
+
+  /* ── TERMS TABLE ── */
+  .terms {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+
+  .terms tr {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .terms tr:last-child {
+    border-bottom: none;
+  }
+
+  .terms td {
+    padding: 5px 0;
+    vertical-align: top;
+  }
+
+  .terms td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--accent2);
+    white-space: nowrap;
+    padding-right: 10px;
+    width: 1%;
+  }
+
+  .terms td:last-child {
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  /* ── MASTER TABLE ── */
+  .master-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    margin-top: 0.4rem;
+  }
+
+  .master-table th {
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 4px 6px 6px;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .master-table th:not(:first-child) { text-align: center; }
+
+  .master-table td {
+    padding: 6px 6px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: middle;
+  }
+
+  .master-table tr:last-child td { border-bottom: none; }
+
+  .master-table td:first-child {
+    font-weight: 500;
+    font-size: 0.8rem;
+  }
+
+  .master-table td:not(:first-child) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  .master-table .p-cell { color: var(--accent2); }
+  .master-table .a-cell { color: var(--accent3); }
+
+  .frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: middle;
+    line-height: 1.1;
+    font-size: 0.75em;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+  }
+
+  .frac span { display: block; text-align: center; }
+  .frac .num { border-bottom: 1.5px solid currentColor; padding: 0 2px; }
+  .frac .den { padding: 0 2px; }
+
+  /* ── REMINDER BOXES ── */
+  .reminders {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 0.5rem;
+  }
+
+  .reminder {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .reminder .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .reminder strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ── WARN BOX ── */
+  .warnbox {
+    background: var(--warn-bg);
+    border-left: 3px solid #e67e00;
+    border-radius: 0 3px 3px 0;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.75rem;
+    color: var(--warn);
+    line-height: 1.4;
+    margin-top: 0.6rem;
+  }
+
+  .warnbox strong { color: #7d4e00; font-weight: 600; }
+
+  /* ── PI SECTION ── */
+  .pi-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 0.5rem;
+  }
+
+  .pi-big {
+    font-family: 'Crimson Pro', serif;
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .pi-options {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .pi-opt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+  }
+
+  .pi-opt .tag {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.72rem;
+    padding: 1px 6px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .pi-opt .when {
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 1rem 0 0.8rem;
+  }
+
+  /* ── ACCENT STRIP ── */
+  .strip {
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .strip-red { background: var(--accent); }
+  .strip-blue { background: var(--accent2); }
+  .strip-green { background: var(--accent3); }
+
+  /* shapes row */
+  .shapes-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 0.5rem;
+  }
+
+  .shape-card {
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 0.5rem 0.6rem;
+    text-align: center;
+  }
+
+  .shape-card svg {
+    display: block;
+    margin: 0 auto 6px;
+  }
+
+  .shape-card .sname {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .shape-card .sf {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    line-height: 1.5;
+  }
+
+  .sf-p { color: var(--accent2); }
+  .sf-a { color: var(--accent3); }
+
+  /* footer */
+  footer {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    padding-top: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="title-block">
+      <h1>Circles</h1>
+      <p>Primary 6 Mathematics &nbsp;·&nbsp; Formula Cheatsheet</p>
+    </div>
+    <div class="pi-stamp">π</div>
+  </header>
+
+  <div class="columns">
+
+    <!-- LEFT COLUMN -->
+    <div class="col-left">
+
+      <!-- KEY TERMS -->
+      <section>
+        <div class="strip strip-red"></div>
+        <div class="sec-label">Key terms</div>
+        <table class="terms">
+          <tr>
+            <td>r</td>
+            <td><strong>Radius</strong> — distance from centre to any point on boundary</td>
+          </tr>
+          <tr>
+            <td>d</td>
+            <td><strong>Diameter</strong> — straight line through centre, edge to edge. d = 2r</td>
+          </tr>
+          <tr>
+            <td>C</td>
+            <td><strong>Circumference</strong> — total length of the circle's boundary (perimeter)</td>
+          </tr>
+          <tr>
+            <td>A</td>
+            <td><strong>Area</strong> — 2-D space enclosed by the circle (always cm²)</td>
+          </tr>
+          <tr>
+            <td>π</td>
+            <td><strong>Pi</strong> — ratio of circumference to diameter. A constant ≈ 3.14159…</td>
+          </tr>
+        </table>
+      </section>
+
+      <!-- PI -->
+      <section>
+        <div class="strip strip-blue"></div>
+        <div class="sec-label">When to use which π</div>
+        <div class="pi-row">
+          <span class="pi-big">π</span>
+          <div class="pi-options">
+            <div class="pi-opt">
+              <span class="tag">22/7</span>
+              <span class="when">when r or d is a multiple of 7</span>
+            </div>
+            <div class="pi-opt">
+              <span class="tag">3.14</span>
+              <span class="when">all other non-calculator questions</span>
+            </div>
+            <div class="pi-opt">
+              <span class="tag">calc π</span>
+              <span class="when">when calculator is allowed</span>
+            </div>
+            <div class="pi-opt">
+              <span class="tag">leave in π</span>
+              <span class="when">when answer requires exact form</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FULL CIRCLE -->
+      <section>
+        <div class="strip strip-red"></div>
+        <div class="sec-label">Full circle</div>
+        <div class="diagram">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="32" r="26" stroke="#0f0e0c" stroke-width="1.5" fill="#f0ece0"/>
+            <line x1="32" y1="32" x2="58" y2="32" stroke="#c0392b" stroke-width="1.5"/>
+            <circle cx="32" cy="32" r="2" fill="#0f0e0c"/>
+            <text x="43" y="28" font-size="8" fill="#c0392b" font-family="JetBrains Mono,monospace" font-weight="700">r</text>
+            <line x1="6" y1="52" x2="58" y2="52" stroke="#1a5276" stroke-width="1.2"/>
+            <text x="28" y="62" font-size="8" fill="#1a5276" font-family="JetBrains Mono,monospace" font-weight="700">d</text>
+          </svg>
+          <div style="font-size:0.75rem;color:var(--muted);line-height:1.6">
+            The full boundary curve.<br>
+            <strong style="color:var(--ink)">d = 2r</strong> always.
+          </div>
+        </div>
+        <div class="formula-row">
+          <div class="fpill blue">
+            <div class="flabel">Circumference</div>
+            <div class="fval">πd</div>
+            <div class="falt">= 2πr</div>
+          </div>
+          <div class="fpill green">
+            <div class="flabel">Area</div>
+            <div class="fval">πr²</div>
+            <div class="falt">= π × r × r</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REMINDERS -->
+      <section>
+        <div class="strip strip-green"></div>
+        <div class="sec-label">Key reminders</div>
+        <div class="reminders">
+          <div class="reminder"><div class="dot"></div><span><strong>Perimeter of partial circles</strong> always includes the straight edge(s) — don't just find the arc!</span></div>
+          <div class="reminder"><div class="dot"></div><span><strong>Semicircle</strong> has 1 straight edge = diameter (d)</span></div>
+          <div class="reminder"><div class="dot"></div><span><strong>Quadrant</strong> has 2 straight edges = 2 radii = 1 diameter (d)</span></div>
+          <div class="reminder"><div class="dot"></div><span><strong>Sector (θ°)</strong> has 2 straight edges = 2 radii = 1 diameter (d)</span></div>
+          <div class="reminder"><div class="dot"></div><span><strong>Area units</strong> are always cm² — perimeter units are cm</span></div>
+          <div class="reminder"><div class="dot"></div><span><strong>Compound shapes</strong>: split into parts, calculate each, then add or subtract</span></div>
+          <div class="reminder"><div class="dot"></div><span>Convert between r and d <em>before</em> substituting into any formula</span></div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col-right">
+
+      <!-- PARTIAL CIRCLES VISUAL -->
+      <section>
+        <div class="strip strip-blue"></div>
+        <div class="sec-label">Partial circle shapes</div>
+        <div class="shapes-row">
+          <!-- Semicircle -->
+          <div class="shape-card">
+            <svg width="56" height="40" viewBox="0 0 56 40">
+              <path d="M4 32 A24 24 0 0 1 52 32" stroke="#0f0e0c" stroke-width="1.5" fill="#e8f4f8"/>
+              <line x1="4" y1="32" x2="52" y2="32" stroke="#1a5276" stroke-width="1.5"/>
+              <text x="22" y="38" font-size="7" fill="#1a5276" font-family="JetBrains Mono,monospace" font-weight="700">d</text>
+            </svg>
+            <div class="sname">Semicircle</div>
+            <div class="sf">
+              <span class="sf-p">P: ½πd + d</span><br>
+              <span class="sf-a">A: ½πr²</span>
+            </div>
+          </div>
+          <!-- Quadrant -->
+          <div class="shape-card">
+            <svg width="56" height="56" viewBox="0 0 56 56">
+              <path d="M8 48 A40 40 0 0 1 48 8" stroke="#0f0e0c" stroke-width="1.5" fill="#eaf4ee"/>
+              <line x1="8" y1="8" x2="8" y2="48" stroke="#1e8449" stroke-width="1.5"/>
+              <line x1="8" y1="48" x2="48" y2="48" stroke="#1e8449" stroke-width="1.5"/>
+              <text x="2" y="32" font-size="7" fill="#1e8449" font-family="JetBrains Mono,monospace" font-weight="700">r</text>
+              <text x="25" y="55" font-size="7" fill="#1e8449" font-family="JetBrains Mono,monospace" font-weight="700">r</text>
+            </svg>
+            <div class="sname">Quadrant</div>
+            <div class="sf">
+              <span class="sf-p">P: ¼πd + d</span><br>
+              <span class="sf-a">A: ¼πr²</span>
+            </div>
+          </div>
+          <!-- Sector -->
+          <div class="shape-card">
+            <svg width="56" height="56" viewBox="0 0 56 56">
+              <path d="M28 48 L8 18 A28 28 0 0 1 48 18 Z" stroke="#0f0e0c" stroke-width="1.5" fill="#fdf0e0"/>
+              <text x="18" y="28" font-size="8" fill="#c0392b" font-family="JetBrains Mono,monospace" font-weight="700">θ°</text>
+            </svg>
+            <div class="sname">Any sector</div>
+            <div class="sf">
+              <span class="sf-p" style="font-size:0.6rem">P: θ/360·πd + d</span><br>
+              <span class="sf-a" style="font-size:0.6rem">A: θ/360·πr²</span>
+            </div>
+          </div>
+        </div>
+        <div class="warnbox">
+          <strong>⚠ Perimeter trap:</strong> The "+d" term (straight edges) is the most common mistake. Always ask: how many straight edges does this shape have?
+        </div>
+      </section>
+
+      <!-- MASTER TABLE -->
+      <section>
+        <div class="strip strip-red"></div>
+        <div class="sec-label">Master formula table</div>
+        <table class="master-table">
+          <thead>
+            <tr>
+              <th>Shape</th>
+              <th style="color:var(--accent2)">Perimeter</th>
+              <th style="color:var(--accent3)">Area</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Full circle</td>
+              <td class="p-cell">πd</td>
+              <td class="a-cell">πr²</td>
+            </tr>
+            <tr>
+              <td>Semicircle</td>
+              <td class="p-cell">½πd + d</td>
+              <td class="a-cell">½πr²</td>
+            </tr>
+            <tr>
+              <td>Quadrant</td>
+              <td class="p-cell">¼πd + d</td>
+              <td class="a-cell">¼πr²</td>
+            </tr>
+            <tr>
+              <td>¾ circle</td>
+              <td class="p-cell">¾πd + d</td>
+              <td class="a-cell">¾πr²</td>
+            </tr>
+            <tr>
+              <td>θ° sector</td>
+              <td class="p-cell">(θ/360)πd + d</td>
+              <td class="a-cell">(θ/360)πr²</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:0.6rem;font-size:0.7rem;color:var(--muted);line-height:1.5">
+          Pattern: Area fraction = θ/360 of full circle area.<br>
+          Perimeter arc fraction = θ/360 of circumference, then add straight edges.
+        </div>
+      </section>
+
+      <!-- USEFUL RELATIONSHIPS -->
+      <section>
+        <div class="strip strip-green"></div>
+        <div class="sec-label">Useful relationships</div>
+        <table class="terms" style="margin-top:0.3rem">
+          <tr>
+            <td>d = 2r</td>
+            <td>diameter is double the radius</td>
+          </tr>
+          <tr>
+            <td>r = d/2</td>
+            <td>radius is half the diameter</td>
+          </tr>
+          <tr>
+            <td>2r = d</td>
+            <td>two radii = one diameter (used in quadrant perimeter)</td>
+          </tr>
+          <tr>
+            <td>360°</td>
+            <td>angle at centre of a full circle</td>
+          </tr>
+          <tr>
+            <td>180°</td>
+            <td>semicircle = 180/360 = ½</td>
+          </tr>
+          <tr>
+            <td>90°</td>
+            <td>quadrant = 90/360 = ¼</td>
+          </tr>
+          <tr>
+            <td>270°</td>
+            <td>¾ circle = 270/360 = ¾</td>
+          </tr>
+        </table>
+      </section>
+
+    </div>
+  </div>
+
+  <footer>
+    <span>Primary 6 Mathematics · Circles</span>
+    <span>π = 3.14 &nbsp;|&nbsp; ²²⁄₇ &nbsp;|&nbsp; calc π</span>
+    <span>Polymath Learning Centre</span>
+  </footer>
+
+</div>
+</body>
+</html>
